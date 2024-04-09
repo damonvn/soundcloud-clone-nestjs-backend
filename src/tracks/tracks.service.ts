@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Track } from './schemas/track.schema';
 import { InjectModel, Schema } from '@nestjs/mongoose';
 import { UsersService } from '@/users/users.service';
@@ -30,12 +30,21 @@ export class TracksService {
         return tracks;
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} track`;
+    async findOne(id: string) {
+        if (!mongoose.Types.ObjectId.isValid(id)) return 'Not find track';
+        const tracks = await this.trackModel
+            .findOne({ _id: id })
+            .select('-deletedAt -__v')
+            .populate({
+                path: 'uploader',
+                select: '_id email name role type',
+            })
+            .exec();
+        return tracks;
     }
 
     update(id: number, updateTrackDto: UpdateTrackDto) {
-        return `This action updates a #${id} track`;
+        return 'update';
     }
 
     remove(id: number) {

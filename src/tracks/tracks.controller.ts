@@ -42,20 +42,37 @@ export class TracksController {
         }
     }
 
-    @Get()
-    findAll() {
-        return this.tracksService.findAll();
-    }
-
+    @Public()
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.tracksService.findOne(+id);
+    async findOne(@Param('id') id: string) {
+        try {
+            const track = await this.tracksService.findOne(id);
+            if (track) {
+                return {
+                    data: track,
+                    status: 200,
+                    message: 'Success',
+                };
+            } else {
+                return {
+                    data: null,
+                    status: 200,
+                    message: 'Success',
+                };
+            }
+        } catch (e) {
+            return {
+                data: null,
+                status: 500,
+                error: 'Internal Server Error',
+            };
+        }
     }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
-        return this.tracksService.update(+id, updateTrackDto);
-    }
+    // @Patch(':id')
+    // update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
+    //     return this.tracksService.update(+id, updateTrackDto);
+    // }
 
     @Delete(':id')
     remove(@Param('id') id: string) {

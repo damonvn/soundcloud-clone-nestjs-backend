@@ -12,6 +12,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { TracksModule } from './tracks/tracks.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CommentsModule } from './comments/comments.module';
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
@@ -32,6 +33,7 @@ import { join } from 'path';
         UsersModule,
         AuthModule,
         TracksModule,
+        CommentsModule,
     ],
     controllers: [AppController],
     providers: [
